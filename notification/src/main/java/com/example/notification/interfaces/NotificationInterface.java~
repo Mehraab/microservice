@@ -1,0 +1,7 @@
+package com.example.notification.interfaces;
+
+import com.example.notification.dto.NotificationDto;
+
+public interface NotificationInterface {
+    public String sendNotification(NotificationDto notificationDto);
+}

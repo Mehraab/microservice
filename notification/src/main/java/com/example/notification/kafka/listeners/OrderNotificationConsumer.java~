@@ -1,0 +1,17 @@
+package com.example.notification.kafka.listeners;
+
+import com.example.notification.service.OrderNotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class OrderNotificationConsumer {
+    @Autowired
+    OrderNotificationService orderNotificationService;
+
+    @KafkaListener(topics = "order-notification", groupId = "notification")
+    public void consume(String message) {
+
+    }
+}

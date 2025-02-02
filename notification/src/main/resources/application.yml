@@ -1,0 +1,33 @@
+server:
+    port: 8084
+
+spring:
+    application:
+        name: notification-service
+    kafka:
+        bootstrap-servers:
+            - "[::1]:9092"
+        consumer:
+            group-id: notification
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+            auto-offset-reset: earliest
+
+        properties:
+            spring.json.trusted.packages: "*"
+            spring.json.value.default.type: com.example.notification.dto.NotificationDto
+
+        listener:
+            missing-topics-fatal: false
+
+    datasource:
+        url: jdbc:postgresql://localhost:5432/ecommerce
+        username: postgres
+        password: admin
+        driver-class-name: org.postgresql.Driver
+
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true
+        hibernate:
+            ddl-auto: update
