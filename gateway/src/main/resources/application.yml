@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: gateway
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/TaskManagement
+        registration:
+          keycloak:
+            client-id: api-gateway
+            client-secret: z3TLeKu9W4JFrDvRgxHdgMYAOz3d2pK4
+            authorization-grant-type: authorization_code
+            scope: openid
+            redirect-uri: http://localhost:8765/login/oauth2/code/TaskManagement
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/TaskManagement
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name:  ${spring.application.name}
+        register: true
+        deregister: true
+        enable: true
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        prefer-ip-address: true
+    gateway:
+      routes:
+        - id: order-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/order/**
+        - id: inventory-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/inventory/**
+        - id: payment-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/payment/**
+        - id: notification-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/notification/**
+  main:
+    web-application-type: reactive
+keycloak:
+  use-resource-role-mappings: true
+
+server:
+  port: 8765
+
