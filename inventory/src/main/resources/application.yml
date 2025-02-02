@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: inventory
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  kafka:
+    bootstrap-servers:
+      - "[::1]:9092"
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    retention.ms: 60000
+
+    consumer:
+      group-id: inventory
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+
+    properties:
+      spring.json.trusted.packages: "*"
+      spring.json.value.default.type: com.example.inventory.dto.OrderDto
+
+    listener:
+      missing-topics-fatal: false
+server:
+  port: 8082
